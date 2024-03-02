@@ -28,13 +28,9 @@ class PostsLocalDataSourceImplementation implements PostsLocalDataSource {
   @override
   Future<List<PostModel>> getCachedPosts() {
     final jsonString = _sharedPreferences.getString('posts');
-    if (jsonString != null) {
-      final List postsJson = json.decode(jsonString);
+    final List postsJson = json.decode(jsonString!);
       return Future.value(postsJson
           .map<PostModel>((post) => PostModel.fromJson(post))
           .toList());
-    } else {
-      throw EmptyCacheException();
-    }
   }
 }
