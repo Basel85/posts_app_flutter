@@ -8,19 +8,19 @@ import 'package:posts_app_flutter/features/posts/domain/use_cases/get_all_posts_
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class InjectionContainer {
-  final getIt = GetIt.instance;
-  void init() {
-    getIt.registerLazySingleton(
-        () => PostsRemoteDataSource(DioHelper(dio: Dio()).configureDio()));
-    getIt.registerLazySingleton(() async => PostsLocalDataSourceImplementation(
-        sharedPreferences: await SharedPreferences.getInstance()));
-    getIt.registerLazySingleton(() => PostsRepositoryImplementation(
-        getIt<PostsRemoteDataSource>(),
-        getIt<PostsLocalDataSourceImplementation>()));
-    getIt.registerLazySingleton(
-        () => GetAllPostsUseCase(getIt<PostsRepositoryImplementation>()));
-    getIt.registerFactory(
-        () => PostsBloc(getAllPostsUseCase: getIt<GetAllPostsUseCase>()));
-  }
+final getIt = GetIt.instance;
+Future<void> initDependency() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton(
+      () => PostsRemoteDataSource(DioHelper(dio: Dio()).configureDio()));
+  getIt.registerLazySingleton(() => PostsLocalDataSourceImplementation(
+      sharedPreferences: sharedPreferences));
+  getIt.registerLazySingleton(() => PostsRepositoryImplementation(
+      getIt<PostsRemoteDataSource>(),
+      getIt<PostsLocalDataSourceImplementation>()));
+
+  getIt.registerLazySingleton(
+      () => GetAllPostsUseCase(getIt<PostsRepositoryImplementation>()));
+  getIt.registerLazySingleton(
+      () => PostsBloc(getAllPostsUseCase: getIt<GetAllPostsUseCase>()));
 }
