@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posts_app_flutter/core/network_exceptions/network_exceptions.dart';
 import 'package:posts_app_flutter/features/posts/domain/use_cases/get_all_posts_use_case.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_events.dart';
@@ -19,4 +20,5 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       }
     });
   }
+  static PostsBloc get(context) => BlocProvider.of(context);
 }

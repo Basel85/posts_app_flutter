@@ -34,7 +34,7 @@ class AppRegex {
     return RegExp(r'^(?=.{8,})').hasMatch(password);
   }
 
-  static bool isNotEmpty(String? value) {
-    return value!.isNotEmpty;
+  static bool isEmpty(String? value) {
+    return value!.isEmpty;
   }
 }
