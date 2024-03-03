@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:posts_app_flutter/core/error/exceptions.dart';
 import 'package:posts_app_flutter/features/posts/data/models/post_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,9 +27,12 @@ class PostsLocalDataSourceImplementation implements PostsLocalDataSource {
   @override
   Future<List<PostModel>> getCachedPosts() {
     final jsonString = _sharedPreferences.getString('posts');
-    final List postsJson = json.decode(jsonString!);
+    if (jsonString != null) {
+      final List postsJson = json.decode(jsonString);
       return Future.value(postsJson
           .map<PostModel>((post) => PostModel.fromJson(post))
           .toList());
+    }
+    return Future.value([]);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:posts_app_flutter/core/network_exceptions/network_exceptions.dart';
 import 'package:posts_app_flutter/features/posts/domain/use_cases/get_all_posts_use_case.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_events.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_states.dart';
@@ -12,7 +13,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         emit(PostsLoadingState());
         final data = await getAllPostsUseCase();
         data.fold(
-          (failure) => emit(PostsErrorState(message: failure.message)),
+          (failure) => emit(PostsErrorState(message: NetworkExceptions.getErrorMessage(failure))),
           (posts) => emit(PostsSuccessState(posts: posts))
         );
       }

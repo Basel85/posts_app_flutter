@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:posts_app_flutter/core/error/failures.dart';
+import 'package:posts_app_flutter/core/network_exceptions/network_exceptions.dart';
 import 'package:posts_app_flutter/features/posts/domain/repositories/posts_repository.dart';
 
 class DeletePostUseCase {
@@ -7,7 +7,7 @@ class DeletePostUseCase {
 
   DeletePostUseCase(this._postRepository);
 
-  Future<Either<Failure,Unit>> call({required int postId}) async {
+  Future<Either<NetworkExceptions,void>> call({required int postId}) async {
     return await _postRepository.deletePost(postId: postId);
   }
 }
