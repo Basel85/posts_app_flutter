@@ -14,7 +14,7 @@ class PostsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(),
+        appBar: const CustomAppBar(title: 'Posts',),
         body: BlocProvider(
           create: (context) => getIt<PostsBloc>()..add(GetPostsEvent()),
           child: BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
@@ -26,16 +26,15 @@ class PostsScreen extends StatelessWidget {
                 },
                 child: ListView.separated(
                     itemBuilder: (context, index) => ListTile(
-                          title: Text(
-                            posts[index].title,
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(posts[index].body,
-                            style: TextStyle(fontSize: 16.sp),
-                            
-                          )
+                        title: Text(
+                          posts[index].title,
+                          style: TextStyle(
+                              fontSize: 20.sp, fontWeight: FontWeight.bold),
                         ),
+                        subtitle: Text(
+                          posts[index].body,
+                          style: TextStyle(fontSize: 16.sp),
+                        )),
                     separatorBuilder: (context, _) => SizedBox(
                           height: 10.h,
                         ),
@@ -53,6 +52,13 @@ class PostsScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }),
-        ));
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Add your logic here
+          },
+          child: const Icon(Icons.add),
+        )
+        );
   }
 }
