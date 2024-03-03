@@ -9,23 +9,32 @@ import 'package:posts_app_flutter/core/widgets/custom_text_form_field/body_text_
 import 'package:posts_app_flutter/core/widgets/custom_text_form_field/title_text_form_field.dart';
 import 'package:posts_app_flutter/core/widgets/loading_alert_dialog.dart';
 import 'package:posts_app_flutter/features/posts/domain/entities/post.dart';
-import 'package:posts_app_flutter/features/posts/presentation/bloc/add_post/add_post_bloc.dart';
-import 'package:posts_app_flutter/features/posts/presentation/bloc/add_post/add_post_events.dart';
-import 'package:posts_app_flutter/features/posts/presentation/bloc/add_post/add_post_states.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_bloc.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_events.dart';
+import 'package:posts_app_flutter/features/posts/presentation/bloc/update_post/update_post_bloc.dart';
+import 'package:posts_app_flutter/features/posts/presentation/bloc/update_post/update_post_events.dart';
+import 'package:posts_app_flutter/features/posts/presentation/bloc/update_post/update_post_states.dart';
 
-class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({super.key});
+class UpdatePostScreen extends StatefulWidget {
+  final Post post;
+  const UpdatePostScreen({super.key, required this.post});
 
   @override
-  State<AddPostScreen> createState() => _AddPostScreenState();
+  State<UpdatePostScreen> createState() => _UpdatePostScreenState();
 }
 
-class _AddPostScreenState extends State<AddPostScreen> with SnackBarViewer {
+class _UpdatePostScreenState extends State<UpdatePostScreen>
+    with SnackBarViewer {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
+
+  @override
+  void initState() {
+    _titleController.text = widget.post.title;
+    _bodyController.text = widget.post.body;
+    super.initState();
+  }
 
   @override
   dispose() {
@@ -38,19 +47,19 @@ class _AddPostScreenState extends State<AddPostScreen> with SnackBarViewer {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'Add Post',
+        title: 'Update Post',
       ),
-      body: BlocListener<AddPostBloc, AddPostState>(
+      body: BlocListener<UpdatePostBloc, UpdatePostState>(
         listener: (context, state) {
-          if (state is AddPostSuccessState) {
+          if (state is UpdatePostSuccessState) {
             showSnackBar(
                 context: context,
                 message: state.message,
                 backgroundColor: AppColors.greenColor);
             Navigator.pop(context);
             PostsBloc.get(context).add(GetPostsEvent());
-            Navigator.pop(context);
-          } else if (state is AddPostErrorState) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          } else if (state is UpdatePostErrorState) {
             showSnackBar(
                 context: context,
                 message: state.message,
@@ -79,16 +88,18 @@ class _AddPostScreenState extends State<AddPostScreen> with SnackBarViewer {
                   Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 20.w, vertical: 20.h),
-                      child: BodyTextFormField(bodyController: _bodyController)),
+                      child:
+                          BodyTextFormField(bodyController: _bodyController)),
                   CustomButton(
-                    buttonText: 'Add Post',
+                    buttonText: 'Update Post',
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         FocusScope.of(context).unfocus();
-                        AddPostBloc.get(context).add(AddPostButtonEvent(
+                        UpdatePostBloc.get(context).add(UpdatePostButtonEvent(
                           post: Post(
                             title: _titleController.text,
                             body: _bodyController.text,
+                            id: widget.post.id,
                           ),
                         ));
                       }

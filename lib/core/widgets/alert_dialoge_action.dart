@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomButton extends StatelessWidget {
+class AlertDialogeAction extends StatelessWidget {
   final void Function() onPressed;
-  final String buttonText;
-  const CustomButton({
-    super.key,
-    required this.onPressed,
-    required this.buttonText,
-  });
+  final String actionText;
+  const AlertDialogeAction(
+      {super.key, required this.onPressed, required this.actionText});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton(
       onPressed: onPressed,
-      child: Text(buttonText,
+      child: Text(actionText,
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
     );
   }

@@ -7,6 +7,7 @@ import 'package:posts_app_flutter/core/widgets/get_error_message.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_bloc.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_events.dart';
 import 'package:posts_app_flutter/features/posts/presentation/bloc/posts/posts_states.dart';
+import 'package:posts_app_flutter/features/posts/presentation/widgets/post_component.dart';
 
 class PostsScreen extends StatefulWidget {
   const PostsScreen({super.key});
@@ -21,10 +22,13 @@ class _PostsScreenState extends State<PostsScreen> {
     super.initState();
     PostsBloc.get(context).add(GetPostsEvent());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(title: 'Posts',),
+        appBar: const CustomAppBar(
+          title: 'Posts',
+        ),
         body: BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
           if (state is PostsSuccessState) {
             final posts = state.posts;
@@ -33,16 +37,8 @@ class _PostsScreenState extends State<PostsScreen> {
                 PostsBloc.get(context).add(GetPostsEvent());
               },
               child: ListView.separated(
-                  itemBuilder: (context, index) => ListTile(
-                      title: Text(
-                        posts[index].title,
-                        style: TextStyle(
-                            fontSize: 20.sp, fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        posts[index].body,
-                        style: TextStyle(fontSize: 16.sp),
-                      )),
+                  itemBuilder: (context, index) =>
+                      PostComponent(post: posts[index]),
                   separatorBuilder: (context, _) => SizedBox(
                         height: 10.h,
                       ),
@@ -65,7 +61,6 @@ class _PostsScreenState extends State<PostsScreen> {
             Navigator.pushNamed(context, AppRoutePaths.addPost);
           },
           child: const Icon(Icons.add),
-        )
-        );
+        ));
   }
 }
