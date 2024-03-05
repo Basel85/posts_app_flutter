@@ -44,6 +44,7 @@ dependencies:
   get_it: ^7.6.7
   json_annotation: ^4.8.1
   json_serializable: ^6.7.1
+  mocktail: ^1.0.3
   retrofit: ^4.1.0
   retrofit_generator: ^8.1.0
   shared_preferences: ^2.2.2
@@ -57,7 +58,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icons/app_icon.jpg"
-  min_sdk_android: 21 
+  min_sdk_android: 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
